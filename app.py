@@ -15,6 +15,12 @@ def load_model_and_pipeline():
     except FileNotFoundError:
         st.error("Model or pipeline files not found. Make sure 'modelo_churn.pkl' and 'pipeline_preproc.pkl' are in the same directory as this app.")
         st.stop()
+    except AttributeError as e:
+        st.error(f"Error loading model or pipeline due to version incompatibility: {e}. This often happens when models are saved with one scikit-learn version and loaded with another. Please ensure your models were re-saved with compatible library versions and that the latest .pkl files are deployed.")
+        st.stop()
+    except Exception as e: # Catch any other unexpected errors during loading
+        st.error(f"An unexpected error occurred while loading models: {e}")
+        st.stop()
 
 modelo_churn, pipeline_preproc = load_model_and_pipeline()
 
